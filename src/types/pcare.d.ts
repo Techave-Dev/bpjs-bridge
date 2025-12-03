@@ -6,4 +6,9 @@ declare global {
     nmDiag: string;
     nonSpesialis: boolean;
   }
+
+  interface AllergyType {
+    kdJenisAlergi: string;
+    nmJenisAlergi: string;
+  }
 }

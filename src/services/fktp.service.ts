@@ -1,17 +1,20 @@
 import { AxiosResponse } from "axios";
-import { enpoints } from "../config/enpoints";
+import { EndpointName, enpoints } from "../config/enpoints";
+import { createBpjsClient } from "../core/httpClient";
+import { configType } from "../core/configHelper";
+import { BPJSBridgeConfig } from "../config/BPJSConfig";
 
 export class FktpService {
   private client;
 
-  constructor(config: any) {
-    this.client = config.client; // client dari axios yang sudah disiapkan
+  constructor(config: configType) {
+    this.client = createBpjsClient(config); // client dari axios yang sudah disiapkan
   }
 
   // Fungsi dinamis untuk mengakses endpoint berdasarkan nama dan parameter
   async callEndpoint<T>(
-    name: string,
-    params: any
+    name: EndpointName,
+    params: Record<string, any> = {}
   ): Promise<AxiosResponse<BPJSResponse<T>>> {
     // Menambahkan tipe return yang jelas
     const endpointConfig = enpoints.find((e) => e.name === name);
@@ -21,13 +24,13 @@ export class FktpService {
     }
 
     // Membentuk URL endpoint dengan menggantikan parameter dinamis
-    let endpoint = endpointConfig.endpoint;
+    let endpoint = endpointConfig.endpoint as string;
     Object.keys(params).forEach((key) => {
       endpoint = endpoint.replace(`{${key}}`, params[key]);
     });
 
     // Melakukan request sesuai dengan method yang ditentukan di statusConfig
-    switch (endpointConfig.method) {
+    switch (endpointConfig.method as string) {
       case "GET":
         return await this.client.get(endpoint);
       case "POST":

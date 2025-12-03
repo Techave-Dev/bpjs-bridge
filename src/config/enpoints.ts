@@ -335,4 +335,6 @@ export const enpoints = [
     method: "POST",
     description: "Membatalkan antrean pasien (WS Antrol)",
   },
-];
+] as const;
+
+export type EndpointName = (typeof enpoints)[number]["name"];
