@@ -66,10 +66,24 @@ export class PcareService extends FktpService {
 
   /**
    *
+   * @param kodeNamaDPHO Kode atau nama DPHO
+   * @param start
+   * @param limit
    * @returns
    */
-  async getDPHO(): Promise<DataPaginate<getDPHOType>> {
-    const response = await this.callEndpoint<DataPaginate<getDPHOType>>("dpho");
+  async getDPHO(
+    kodeNamaDPHO: string,
+    start: number,
+    limit: number
+  ): Promise<DataPaginate<getDPHOType>> {
+    const response = await this.callEndpoint<DataPaginate<getDPHOType>>(
+      "dpho",
+      {
+        kodeNamaDPHO,
+        start,
+        limit,
+      }
+    );
     return response.data;
   }
 
@@ -164,6 +178,18 @@ export class PcareService extends FktpService {
     const response = await this.callEndpoint<DataArray<AlergiJenisType>>(
       "alergi_jenis",
       { jenisAlergi }
+    );
+    return response.data;
+  }
+
+  // # Prognosa
+  /**
+   *
+   * @returns
+   */
+  async getPrognosa(): Promise<DataArray<PrognosaType>> {
+    const response = await this.callEndpoint<DataArray<PrognosaType>>(
+      "prognosa"
     );
     return response.data;
   }

@@ -39,4 +39,8 @@ declare global {
     kdAlergi: string;
     nmAlergi: string;
   }
+  interface PrognosaType {
+    kdPrognosa: string;
+    nmPrognosa: string;
+  }
 }

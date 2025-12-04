@@ -53,11 +53,11 @@ export class FktpService {
         "EX",
         expInSecond
       );
-      console.info(
-        `🔵 Redis SET: ${
-          this.defaultRedisKeyPrefix + key
-        } (TTL: ${expInSecond}s)`
-      );
+      // console.info(
+      //   `🔵 Redis SET: ${
+      //     this.defaultRedisKeyPrefix + key
+      //   } (TTL: ${expInSecond}s)`
+      // );
     } catch (error) {
       console.error("❌ Redis set error:", error);
     }
@@ -77,11 +77,11 @@ export class FktpService {
         console.info(`🔍 Redis GET: ${this.defaultRedisKeyPrefix + key}`);
         return data;
       }
-      console.warn?.(
-        `⚠️ Redis GET: ${
-          this.defaultRedisKeyPrefix + key
-        } (Data tidak ditemukan)`
-      );
+      // console.warn?.(
+      //   `⚠️ Redis GET: ${
+      //     this.defaultRedisKeyPrefix + key
+      //   } (Data tidak ditemukan)`
+      // );
       return null;
     } catch (error) {
       console.error("❌ Redis get error:", error);

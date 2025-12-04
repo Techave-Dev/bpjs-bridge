@@ -1,8 +1,16 @@
+import Redis from "ioredis";
 import { PcareService } from "../services/pcare/pcare.service";
 import { PcareConfig } from "./config";
 
 // Setup PcareService
-const pcareService = new PcareService(PcareConfig);
+const pcareService = new PcareService(
+  PcareConfig,
+  new Redis({
+    host: "localhost",
+    port: 6379,
+    password: "",
+  })
+);
 
 describe("PcareService", () => {
   it("should fetch diagnosa data", async () => {
@@ -64,7 +72,7 @@ describe("PcareService", () => {
     );
   });
   it("should fetch getDPHO", async () => {
-    const response = await pcareService.getDPHO();
+    const response = await pcareService.getDPHO("a", 0, 1);
     expect(response).toEqual(
       expect.objectContaining({
         count: expect.any(Number),
@@ -132,6 +140,19 @@ describe("PcareService", () => {
             nmTindakan: expect.any(String),
             maxTarif: expect.any(Number),
             withValue: expect.any(Boolean),
+          }),
+        ]),
+      })
+    );
+  });
+  it("should fetch Prognosa", async () => {
+    const response = await pcareService.getPrognosa();
+    expect(response).toEqual(
+      expect.objectContaining({
+        list: expect.arrayContaining([
+          expect.objectContaining({
+            kdPrognosa: expect.any(String),
+            nmPrognosa: expect.any(String),
           }),
         ]),
       })
