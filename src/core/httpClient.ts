@@ -6,13 +6,12 @@ import { decryptBpjsResponse } from "./decrypt";
 export const createBpjsClient = (config: configType) => {
   const client = axios.create({
     baseURL: config.baseUrl,
-    // timeout: 20000,
+    timeout: 20000,
   });
 
   const headers = generateHeader(config);
-  client.interceptors.request.use((req) => {
-    console.log("Generated Headers:", headers["X-timestamp"]);
 
+  client.interceptors.request.use((req) => {
     req.headers["X-cons-id"] = headers["X-cons-id"];
     req.headers["X-timestamp"] = headers["X-timestamp"];
     req.headers["X-signature"] = headers["X-signature"];
@@ -28,16 +27,15 @@ export const createBpjsClient = (config: configType) => {
 
   client.interceptors.response.use(
     async (res: AxiosResponse) => {
-      console.log("Raw response data:", res);
       const { response: encryptedData } = res.data;
 
       // Ensure encryptedData is a string before trying to decrypt
       if (typeof encryptedData === "string") {
-        const timestamp = res.request?.headers["X-timestamp"];
+        const timestamp = String(headers["X-timestamp"]);
         const decrypted = decryptBpjsResponse(
           encryptedData,
           config.consId,
-          config.password,
+          config.secretKey,
           timestamp
         );
         // Return a full AxiosResponse with decrypted payload in data
@@ -48,7 +46,7 @@ export const createBpjsClient = (config: configType) => {
       return { ...res, data: {} };
     },
     (err) => {
-      console.log(err);
+      console.error(err);
       const message = err.response?.data?.metaData?.message || err.message;
 
       // // If axios already provided a response, reject with it to preserve details

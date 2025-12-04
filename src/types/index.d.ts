@@ -8,10 +8,13 @@ declare global {
 
   type DataObject<T> = T;
 
-  interface DataArray<T> {
+  type DataArray<T> = {
+    list: Array<T>;
+  };
+  type DataPaginate<T> = {
     count: number;
     list: Array<T>;
-  }
+  };
 }
 
 interface MetaData {

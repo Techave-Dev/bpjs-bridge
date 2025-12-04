@@ -32,7 +32,7 @@ export const generateHeader = ({
 
   return {
     "X-cons-id": consId,
-    "X-timestamp": timestamp,
+    "X-timestamp": String(timestamp),
     "X-signature": signature,
     "X-Authorization": authorization,
     userKey,
