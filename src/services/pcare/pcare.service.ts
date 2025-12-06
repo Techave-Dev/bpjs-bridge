@@ -5,7 +5,6 @@ import { FktpService } from "../fktp.service";
 import { DataArray, DataPaginate } from "../../types/global";
 import {
   AlergiJenisType,
-  Diagnose,
   GetDPHOType,
   PoliFKTPType,
   PrognosaType,
@@ -14,11 +13,16 @@ import {
   StatusPulangType,
 } from "../../types/pcare";
 import { BaseUrl } from "../../config/enpoints";
+import { ObatModule } from "./module/obat.module";
+import { DiagnosaModule } from "./module/diagnosa.module";
 
 /**
  * Service untuk mengakses endpoint PCare BPJS
  */
 export class PcareService extends FktpService {
+  public readonly diagnosa!: DiagnosaModule;
+  public readonly obat!: ObatModule;
+
   /**
    * Constructor PcareService
    * @param config konfigurasi BPJS
@@ -32,28 +36,9 @@ export class PcareService extends FktpService {
       redisClient,
       chachePrefix ?? "pcare"
     );
-  }
-  /**
-   *
-   * @param kodediag
-   * @param start
-   * @param limit
-   * @returns
-   */
-  async getDiagnosa(
-    kodediag: string,
-    start: number,
-    limit: number
-  ): Promise<DataPaginate<Diagnose>> {
-    const response = await this.callEndpoint<DataPaginate<Diagnose>>(
-      "diagnosa",
-      {
-        kodediag,
-        start,
-        limit,
-      }
-    );
-    return response.data;
+
+    this.diagnosa = new DiagnosaModule(this);
+    this.obat = new ObatModule(this);
   }
 
   /**

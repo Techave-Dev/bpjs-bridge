@@ -141,7 +141,7 @@ export class FktpService {
    * @param params
    * @returns
    */
-  protected async callEndpoint<T>(
+  public async callEndpoint<T>(
     name: EndpointName,
     params: Record<string, any> = {}
   ): Promise<AxiosResponse<T>> {
