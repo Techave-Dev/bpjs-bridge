@@ -4,3 +4,6 @@ export * from "./services/pcare/pcare.service";
 export * from "./lib/redis";
 export * from "./types/global";
 export * from "./types/pcare";
+export * from "./types/kunjungan";
+export * from "./types/peserta";
+export * from "./types/kunjungan";

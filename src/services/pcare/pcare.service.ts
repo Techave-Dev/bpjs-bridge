@@ -1,20 +1,20 @@
 // src/services/PcareService.ts
 import Redis from "ioredis";
+import { BaseUrl } from "../../config/enpoints";
 import { configType } from "../../core/configHelper";
 import { FktpService } from "../fktp.service";
-import { DataArray, DataPaginate } from "../../types/global";
-import {
-  AlergiJenisType,
-  GetDPHOType,
-  PoliFKTPType,
-  PrognosaType,
-  ProviderRayonisasiType,
-  ReferensiTindakanType,
-  StatusPulangType,
-} from "../../types/pcare";
-import { BaseUrl } from "../../config/enpoints";
-import { ObatModule } from "./module/obat.module";
+import { AlergiModule } from "./module/alergi.module";
 import { DiagnosaModule } from "./module/diagnosa.module";
+import { DokterModule } from "./module/dokter.module";
+import { KunjunganModule } from "./module/kunjungan.module";
+import { ObatModule } from "./module/obat.module";
+import { PesertaModule } from "./module/peserta.module";
+import { PoliModule } from "./module/poli.module";
+import { ProviderModule } from "./module/provider.module";
+import { StatusPulangModule } from "./module/statusPulang.module";
+import { TindakanPulangModule } from "./module/tindakan.module";
+import { KesadaranModule } from "./module/kesadaran.module";
+import { PrognosaModule } from "./module/prognosa.module";
 
 /**
  * Service untuk mengakses endpoint PCare BPJS
@@ -22,6 +22,16 @@ import { DiagnosaModule } from "./module/diagnosa.module";
 export class PcareService extends FktpService {
   public readonly diagnosa!: DiagnosaModule;
   public readonly obat!: ObatModule;
+  public readonly dokter!: DokterModule;
+  public readonly kunjungan!: KunjunganModule;
+  public readonly kesadaran!: KesadaranModule;
+  public readonly poli!: PoliModule;
+  public readonly provider!: ProviderModule;
+  public readonly prognosa!: PrognosaModule;
+  public readonly statusPulang!: StatusPulangModule;
+  public readonly tindakan!: TindakanPulangModule;
+  public readonly alergi!: AlergiModule;
+  public readonly peserta!: PesertaModule;
 
   /**
    * Constructor PcareService
@@ -39,160 +49,15 @@ export class PcareService extends FktpService {
 
     this.diagnosa = new DiagnosaModule(this);
     this.obat = new ObatModule(this);
-  }
-
-  /**
-   *
-   * @param start
-   * @param limit
-   * @returns
-   */
-  async getDokter(start: number, limit: number): Promise<any> {
-    const response = await this.callEndpoint<DataArray<any>>("dokter", {
-      start,
-      limit,
-    });
-    return response.data;
-  }
-
-  /**
-   *
-   * @returns
-   */
-  async getKesadaran(): Promise<any> {
-    const response = await this.callEndpoint<DataArray<any>>("kesadaran");
-    return response.data;
-  }
-
-  //#OBAT
-
-  /**
-   *
-   * @param kodeNamaDPHO Kode atau nama DPHO
-   * @param start
-   * @param limit
-   * @returns
-   */
-  async getDPHO(
-    kodeNamaDPHO: string,
-    start: number,
-    limit: number
-  ): Promise<DataPaginate<GetDPHOType>> {
-    const response = await this.callEndpoint<DataPaginate<GetDPHOType>>(
-      "dpho",
-      {
-        kodeNamaDPHO,
-        start,
-        limit,
-      }
-    );
-    return response.data;
-  }
-
-  //
-
-  /**
-   *
-   * @param nomorKunjungan
-   * @returns
-   */
-  async getRujukanKunjungan(nomorKunjungan: string): Promise<any> {
-    const response = await this.callEndpoint<any>("rujukan_kunjungan", {
-      nomorKunjungan,
-    });
-    return response.data;
-  }
-
-  // # POLI
-  async getPiliFKTP(
-    start: number,
-    limit: number
-  ): Promise<DataPaginate<PoliFKTPType>> {
-    const response = await this.callEndpoint<DataPaginate<PoliFKTPType>>(
-      "poli_fktp",
-      {
-        start,
-        limit,
-      }
-    );
-    return response.data;
-  }
-
-  // # Provider
-  async getProviderRayonisasi(
-    start: number,
-    limit: number
-  ): Promise<DataPaginate<ProviderRayonisasiType>> {
-    const response = await this.callEndpoint<
-      DataPaginate<ProviderRayonisasiType>
-    >("provider_rayonisasi", {
-      start,
-      limit,
-    });
-    return response.data;
-  }
-
-  // # Status Pulang
-  async getStatusPulang(
-    rawatInap: boolean
-  ): Promise<DataPaginate<StatusPulangType>> {
-    const response = await this.callEndpoint<DataPaginate<StatusPulangType>>(
-      "status_pulang",
-      {
-        rawatInap,
-      }
-    );
-    return response.data;
-  }
-
-  // # Tindakan
-  /**
-   *
-   * @param kdTkp 10 : RJTP, 20 : RITP, 50 : Promotif
-   * @param start
-   * @param limit
-   * @returns
-   */
-  async getReferensiTindakan(
-    kdTkp: "10" | "20" | "50",
-    start: number,
-    limit: number
-  ): Promise<DataPaginate<ReferensiTindakanType>> {
-    const response = await this.callEndpoint<
-      DataPaginate<ReferensiTindakanType>
-    >("referensi_tindakan", {
-      kdTkp,
-      start,
-      limit,
-    });
-    return response.data;
-  }
-
-  // # Alergi
-  /**
-   *
-   * @param jenisAlergi 01:Makanan, 02:Udara, 03:Obat
-   * @returns
-   */
-  async getAlergiJenis(
-    jenisAlergi: "01" | "02" | "03"
-  ): Promise<DataArray<AlergiJenisType>> {
-    const response = await this.callEndpoint<DataArray<AlergiJenisType>>(
-      "alergi_jenis",
-      { jenisAlergi }
-    );
-    return response.data;
-  }
-
-  // # Prognosa
-  /**
-   *
-   * @returns
-   */
-  async getPrognosa(): Promise<DataArray<PrognosaType>> {
-    const response = await this.callEndpoint<DataArray<PrognosaType>>(
-      "prognosa"
-    );
-    return response.data;
+    this.dokter = new DokterModule(this);
+    this.kunjungan = new KunjunganModule(this);
+    this.kesadaran = new KesadaranModule(this);
+    this.poli = new PoliModule(this);
+    this.provider = new ProviderModule(this);
+    this.prognosa = new PrognosaModule(this);
+    this.statusPulang = new StatusPulangModule(this);
+    this.tindakan = new TindakanPulangModule(this);
+    this.alergi = new AlergiModule(this);
+    this.peserta = new PesertaModule(this);
   }
 }
