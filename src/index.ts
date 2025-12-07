@@ -7,3 +7,5 @@ export * from "./types/pcare";
 export * from "./types/kunjungan";
 export * from "./types/peserta";
 export * from "./types/kunjungan";
+export * from "./types/pendaftaran";
+export * from "./types/spesialis";

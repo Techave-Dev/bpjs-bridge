@@ -15,6 +15,9 @@ import { StatusPulangModule } from "./module/statusPulang.module";
 import { TindakanPulangModule } from "./module/tindakan.module";
 import { KesadaranModule } from "./module/kesadaran.module";
 import { PrognosaModule } from "./module/prognosa.module";
+import { MCUModule } from "./module/mcu.module";
+import { PendaftaranModule } from "./module/pendafataran.module";
+import { SpesialisModule } from "./module/spesialis.module";
 
 /**
  * Service untuk mengakses endpoint PCare BPJS
@@ -32,6 +35,9 @@ export class PcareService extends FktpService {
   public readonly tindakan!: TindakanPulangModule;
   public readonly alergi!: AlergiModule;
   public readonly peserta!: PesertaModule;
+  public readonly mcu!: MCUModule;
+  public readonly pendaftaran!: PendaftaranModule;
+  public readonly spesialis!: SpesialisModule;
 
   /**
    * Constructor PcareService
@@ -59,5 +65,8 @@ export class PcareService extends FktpService {
     this.tindakan = new TindakanPulangModule(this);
     this.alergi = new AlergiModule(this);
     this.peserta = new PesertaModule(this);
+    this.mcu = new MCUModule(this);
+    this.pendaftaran = new PendaftaranModule(this);
+    this.spesialis = new SpesialisModule(this);
   }
 }

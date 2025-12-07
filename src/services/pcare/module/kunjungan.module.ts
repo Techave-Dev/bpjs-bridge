@@ -62,6 +62,54 @@ export class KunjunganModule {
 
   /**
    *
+   * @param props
+   * kirim kode diagnosa dengan string array
+   * @returns
+   * @description
+   * untuk mendapatkan referensi tacc
+   */
+  ref_tacc(kodediags?: string[]) {
+    let options: string[] = [];
+    if (kodediags) {
+      kodediags.forEach(async (kodediag) => {
+        const diag = await this.parent.diagnosa.get(kodediag, 0, 1);
+        options.push(`${diag.list[0].kdDiag}-${diag.list[0].nmDiag}`);
+      });
+    }
+    return [
+      { kdTacc: "-1", nmTacc: "Tanpa TACC", alasanTacc: [] },
+      {
+        kdTacc: "1",
+        nmTacc: "Time",
+        alasanTacc: ["< 3 Hari", ">= 3 - 7 Hari", ">= 7 Hari"],
+      },
+      {
+        kdTacc: "2",
+        nmTacc: "Age",
+        alasanTacc: [
+          "< 1 Bulan",
+          ">= 1 Bulan s/d < 12 Bulan",
+          ">= 1 Tahun s/d < 5 Tahun",
+          ">= 5 Tahun s/d < 12 Tahun",
+          ">= 12 Tahun s/d < 55 Tahun",
+          ">= 55 Tahun",
+        ],
+      },
+      {
+        kdTacc: "3",
+        nmTacc: "Complication",
+        alasanTacc: options ?? [],
+      },
+      {
+        kdTacc: "4",
+        nmTacc: "Comorbidity",
+        alasanTacc: ["< 3 Hari", ">= 3 - 7 Hari", ">= 7 Hari"],
+      },
+    ];
+  }
+
+  /**
+   *
    * @param body
    * @returns
    * @description

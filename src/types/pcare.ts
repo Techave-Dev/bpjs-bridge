@@ -120,3 +120,81 @@ export interface KesadaranType {
 // ====== Kesadaran ==========
 //
 //
+// ====== MCU ==========
+
+export interface McuType {
+  kdMCU: number;
+  noKunjungan: string;
+  kdProvider: string;
+  tglPelayanan: string;
+  tekananDarahSistole: number;
+  tekananDarahDiastole: number;
+  radiologiFoto: any;
+  darahRutinHemo: number;
+  darahRutinLeu: number;
+  darahRutinErit: number;
+  darahRutinLaju: number;
+  darahRutinHema: number;
+  darahRutinTrom: number;
+  lemakDarahHDL: number;
+  lemakDarahLDL: number;
+  lemakDarahChol: number;
+  lemakDarahTrigli: number;
+  gulaDarahSewaktu: number;
+  gulaDarahPuasa: number;
+  gulaDarahPostPrandial: number;
+  gulaDarahHbA1c: number;
+  fungsiHatiSGOT: number;
+  fungsiHatiSGPT: number;
+  fungsiHatiGamma: number;
+  fungsiHatiProtKual: number;
+  fungsiHatiAlbumin: number;
+  fungsiGinjalCrea: number;
+  fungsiGinjalUreum: number;
+  fungsiGinjalAsam: number;
+  fungsiJantungABI: number;
+  fungsiJantungEKG: any;
+  fungsiJantungEcho: any;
+  funduskopi: any;
+  pemeriksaanLain: any;
+  keterangan: any;
+}
+export interface McuPayload {
+  kdMCU: number;
+  noKunjungan: string;
+  kdProvider: string;
+  tglPelayanan: string;
+  tekananDarahSistole: number;
+  tekananDarahDiastole: number;
+  radiologiFoto: any;
+  darahRutinHemo: number;
+  darahRutinLeu: number;
+  darahRutinErit: number;
+  darahRutinLaju: number;
+  darahRutinHema: number;
+  darahRutinTrom: number;
+  lemakDarahHDL: number;
+  lemakDarahLDL: number;
+  lemakDarahChol: number;
+  lemakDarahTrigli: number;
+  gulaDarahSewaktu: number;
+  gulaDarahPuasa: number;
+  gulaDarahPostPrandial: number;
+  gulaDarahHbA1c: number;
+  fungsiHatiSGOT: number;
+  fungsiHatiSGPT: number;
+  fungsiHatiGamma: number;
+  fungsiHatiProtKual: number;
+  fungsiHatiAlbumin: number;
+  fungsiGinjalCrea: number;
+  fungsiGinjalUreum: number;
+  fungsiGinjalAsam: number;
+  fungsiJantungABI: number;
+  fungsiJantungEKG: any;
+  fungsiJantungEcho: any;
+  funduskopi: any;
+  pemeriksaanLain: any;
+  keterangan: any;
+}
+
+// ====== MCU ==========
