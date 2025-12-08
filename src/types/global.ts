@@ -25,3 +25,8 @@ export type BridgeErrorType =
   | "NOT_FOUND_ERROR"
   | "NO_CONTENT"
   | "UNKNOWN_ERROR";
+
+export type BPJSResponseSucess = {
+  field: string;
+  message: string;
+};

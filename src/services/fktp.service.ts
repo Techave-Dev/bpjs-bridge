@@ -154,11 +154,13 @@ export class FktpService {
    * Memanggil endpoint BPJS berdasarkan nama dan parameter yang diberikan
    * @param name
    * @param params
+   * @param body
    * @returns
    */
   public async callEndpoint<T>(
     name: EndpointName,
-    params: Record<string, any> = {}
+    params: Record<string, any> = {},
+    body: Record<string, any> = {}
   ): Promise<AxiosResponse<T>> {
     // Menambahkan tipe return yang jelas
     const endpointConfig = enpoints.find((e) => e.name === name);
@@ -202,11 +204,11 @@ export class FktpService {
         }
         return res;
       case "POST":
-        return await this.client.post(endpoint, params);
+        return await this.client.post(endpoint, body);
       case "PUT":
-        return await this.client.put(endpoint, params);
+        return await this.client.put(endpoint, body);
       case "DELETE":
-        return await this.client.delete(endpoint);
+        return await this.client.delete(endpoint, body);
       default:
         throw new Error(`Method ${endpointConfig.method} tidak didukung`);
     }
