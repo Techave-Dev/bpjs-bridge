@@ -1,4 +1,4 @@
-export * from "./core/httpClient";
+export * from "./services/httpClient";
 export * from "./core/configHelper";
 export * from "./services/pcare/pcare.service";
 export * from "./lib/redis";

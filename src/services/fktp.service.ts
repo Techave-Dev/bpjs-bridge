@@ -1,7 +1,11 @@
 import { AxiosResponse } from "axios";
 import Redis from "ioredis";
 import { EndpointName, enpoints } from "../config/enpoints";
-import { BpjsCLient, createBpjsClient } from "../core/httpClient";
+import { BpjsCLient, createBpjsClient } from "./httpClient";
+import {
+  BpjsCacheError,
+  BpjsEndpointNotFoundError,
+} from "../types/globalErroModule";
 
 export class FktpService {
   private client;
@@ -58,6 +62,7 @@ export class FktpService {
       // );
     } catch (error) {
       console.error("❌ Redis set error:", error);
+      throw new BpjsCacheError("Gagal menyimpan data ke cache", error);
     }
   }
 
@@ -106,21 +111,30 @@ export class FktpService {
    * Menghapus beberapa kunci berdasarkan pola (pattern)
    */
   private async deleteKeysByPattern(pattern: string) {
-    let cursor = "0";
-    pattern = this.defaultRedisKeyPrefix + ":" + pattern;
-    do {
-      const [nextCursor, foundKeys] = await this.redisClient!.scan(
-        cursor,
-        "MATCH",
-        pattern,
-        "COUNT",
-        100
+    try {
+      let cursor = "0";
+      pattern = this.defaultRedisKeyPrefix + ":" + pattern;
+
+      do {
+        const [nextCursor, foundKeys] = await this.redisClient!.scan(
+          cursor,
+          "MATCH",
+          pattern,
+          "COUNT",
+          100
+        );
+        cursor = nextCursor;
+        if (foundKeys.length > 0) {
+          await this.redisClient!.del(...foundKeys);
+        }
+      } while (cursor !== "0");
+    } catch (error) {
+      console.error("❌ Redis delete by pattern error:", error);
+      throw new BpjsCacheError(
+        "Gagal menghapus data cache berdasarkan pattern",
+        error
       );
-      cursor = nextCursor;
-      if (foundKeys.length > 0) {
-        await this.redisClient!.del(...foundKeys);
-      }
-    } while (cursor !== "0");
+    }
   }
 
   /**
@@ -132,6 +146,7 @@ export class FktpService {
       console.info("🧹 Redis cache cleared!");
     } catch (error) {
       console.error("❌ Redis flush error:", error);
+      throw new BpjsCacheError("Gagal membersihkan cache", error);
     }
   }
 
@@ -149,7 +164,7 @@ export class FktpService {
     const endpointConfig = enpoints.find((e) => e.name === name);
 
     if (!endpointConfig) {
-      throw new Error(`Endpoint ${name} tidak ditemukan`);
+      throw new BpjsEndpointNotFoundError(name);
     }
 
     // Membentuk URL endpoint dengan menggantikan parameter dinamis
@@ -160,6 +175,7 @@ export class FktpService {
     const cacheKey = `${name}:${JSON.stringify(params)}`;
     if (this.redisClient) {
       const cachedData = await this.get(cacheKey);
+
       if (cachedData) {
         const parsed = JSON.parse(cachedData) as T;
         const cachedResponse: AxiosResponse<T> = {
