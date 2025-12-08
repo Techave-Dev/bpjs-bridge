@@ -43,15 +43,10 @@ export class PcareService extends BaseService {
    * Constructor PcareService
    * @param config konfigurasi BPJS
    * @param redisClient instance Redis (opsional)
-   * @param chachePrefix prefix untuk cache Redis (opsional)
    */
-  constructor(config: configType, redisClient?: Redis, chachePrefix?: string) {
+  constructor(config: configType, redisClient?: Redis) {
     const getBaseUrl = BaseUrl[config.mode].url_pcare;
-    super(
-      { ...config, baseUrl: getBaseUrl },
-      redisClient,
-      chachePrefix ?? "pcare"
-    );
+    super({ ...config, baseUrl: getBaseUrl }, redisClient);
 
     this.diagnosa = new DiagnosaModule(this);
     this.obat = new ObatModule(this);

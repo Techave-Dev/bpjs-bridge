@@ -13,7 +13,7 @@ export class BaseService {
   private redisClient: Redis | null = null;
   private defaultRedisKeyPrefix = "bpjs_bridge_fktp";
 
-  constructor(config: BpjsCLient, redisClient?: Redis, chachePrefix?: string) {
+  constructor(config: BpjsCLient, redisClient?: Redis) {
     this.client = createBpjsClient(config); // client dari axios yang sudah disiapkan
     if (redisClient) {
       this.redisClient = redisClient;
@@ -26,10 +26,12 @@ export class BaseService {
         console.error("[BRIDGE FKTP BPJS] => ❌ Redis error:", err);
       });
 
-      if (chachePrefix) {
-        this.defaultRedisKeyPrefix =
-          this.defaultRedisKeyPrefix + "_" + chachePrefix + ":";
-      }
+      this.defaultRedisKeyPrefix =
+        this.defaultRedisKeyPrefix +
+        "_" +
+        config.consId +
+        config.username +
+        ":";
     }
   }
 
