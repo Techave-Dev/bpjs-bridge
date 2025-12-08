@@ -20,15 +20,10 @@ export class AntreanFktpService extends BaseService {
    * Constructor AntreanFktpService
    * @param config konfigurasi BPJS
    * @param redisClient instance Redis (opsional)
-   * @param chachePrefix prefix untuk cache Redis (opsional)
    */
-  constructor(config: configType, redisClient?: Redis, chachePrefix?: string) {
+  constructor(config: configType, redisClient?: Redis) {
     const getBaseUrl = BaseUrl[config.mode].url_antrean_fktp;
-    super(
-      { ...config, baseUrl: getBaseUrl },
-      redisClient,
-      chachePrefix ?? "antreanfktp"
-    );
+    super({ ...config, baseUrl: getBaseUrl }, redisClient);
   }
 
   /**

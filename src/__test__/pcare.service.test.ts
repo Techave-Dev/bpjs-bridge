@@ -3,7 +3,7 @@ import { PcareService } from "../services/pcare/pcare.service";
 import { PcareConfig } from "./config";
 
 // Setup PcareService
-const pcareService = new PcareService(PcareConfig, redis, "redis_prefix_test");
+const pcareService = new PcareService(PcareConfig, redis);
 
 describe("PcareService", () => {
   afterAll(() => {
