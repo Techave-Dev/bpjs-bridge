@@ -14,6 +14,7 @@ export * from "./types/pendaftaran";
 export * from "./types/spesialis";
 export * from "./types/antreanFktp";
 export * from "./types/icare";
+export * from "./types/skrinning";
 
 // error
 export { BpjsError } from "./types/globalErroModule";

@@ -17,7 +17,8 @@ import { PrognosaModule } from "./module/prognosa.module";
 import { ProviderModule } from "./module/provider.module";
 import { SpesialisModule } from "./module/spesialis.module";
 import { StatusPulangModule } from "./module/statusPulang.module";
-import { TindakanPulangModule } from "./module/tindakan.module";
+import { TindakanPulangModule } from "./tindakan.module";
+import { SkrinningModule } from "./module/skrinning.module";
 
 /**
  * Service untuk mengakses endpoint PCare BPJS
@@ -38,6 +39,7 @@ export class PcareService extends BaseService {
   public readonly mcu!: MCUModule;
   public readonly pendaftaran!: PendaftaranModule;
   public readonly spesialis!: SpesialisModule;
+  public readonly skrinning!: SkrinningModule;
 
   /**
    * Constructor PcareService
@@ -63,5 +65,6 @@ export class PcareService extends BaseService {
     this.mcu = new MCUModule(this);
     this.pendaftaran = new PendaftaranModule(this);
     this.spesialis = new SpesialisModule(this);
+    this.skrinning = new SkrinningModule(this);
   }
 }

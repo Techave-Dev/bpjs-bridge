@@ -335,6 +335,32 @@ export const enpoints = [
     method: "POST",
     description: "Membatalkan antrean pasien (WS Antrol)",
   },
+  {
+    name: "scrinning_rekap",
+    endpoint: "skrinning/rekap",
+    method: "GET",
+    description:
+      "Mengambil data rekapitulasi hasil Skrining Riwayat Kesehatan per penyakit",
+  },
+  {
+    name: "scrinning_peserta",
+    endpoint: "/skrinning/peserta/{nomor_peserta}/{start}/{limit}",
+    method: "GET",
+    description:
+      "Mengambil data rekapitulasi Skrining Riwayat Kesehatan per peserta",
+  },
+  {
+    name: "scrinning_diabetes_mellitus",
+    endpoint: "/skrinning/prolanis/dm/{nomor_peserta}/{start}/{limit}",
+    method: "GET",
+    description: "Mengambil data peserta prolanis DM sejak tahun 2017",
+  },
+  {
+    name: "scrinning_hipertensi",
+    endpoint: "skrinning/prolanis/ht/{nomor_peserta}/{start}/{limit}",
+    method: "GET",
+    description: "Mengambil data peserta prolanis HT sejak tahun 2017",
+  },
 ] as const;
 
 export const BaseUrl = {
