@@ -17,7 +17,7 @@ import { PrognosaModule } from "./module/prognosa.module";
 import { ProviderModule } from "./module/provider.module";
 import { SpesialisModule } from "./module/spesialis.module";
 import { StatusPulangModule } from "./module/statusPulang.module";
-import { TindakanPulangModule } from "./tindakan.module";
+import { TindakanPulangModule } from "./module/tindakan.module";
 import { SkrinningModule } from "./module/skrinning.module";
 
 /**
