@@ -1,18 +1,22 @@
 import { redis } from "../lib/redis";
+import { AntreanFktpService } from "../services/antrean/fktpBPJS.service";
 import { PcareService } from "../services/pcare/pcare.service";
 import { PcareConfig } from "./config";
 
 // Setup PcareService
 const pcareService = new PcareService(PcareConfig, redis);
+const jkn = new AntreanFktpService(PcareConfig, redis);
 
 describe("PcareService", () => {
   afterAll(() => {
     redis.disconnect();
   });
+
   it("should load environment variables", () => {
     console.log(PcareConfig);
     expect(PcareConfig).toBeDefined();
   });
+
   it("should fetch diagnosa data", async () => {
     const response = await pcareService.diagnosa.get("r51", 0, 10);
     expect(response).toEqual(
@@ -44,6 +48,7 @@ describe("PcareService", () => {
       })
     );
   });
+
   it("should fetch getDokter", async () => {
     const response = await pcareService.dokter.get(0, 1);
     expect(response).toEqual(
@@ -158,5 +163,33 @@ describe("PcareService", () => {
         ]),
       })
     );
+  });
+  it("should fetch ref poli", async () => {
+    const response = await jkn.getReferensiPoli("2026-01-02");
+    // console.log(response);
+    // expect(response).toEqual(
+    //   expect.objectContaining({
+    //     list: expect.arrayContaining([
+    //       expect.objectContaining({
+    //         kdPrognosa: expect.any(String),
+    //         nmPrognosa: expect.any(String),
+    //       }),
+    //     ]),
+    //   })
+    // );
+  });
+  it("should fetch ref dokter", async () => {
+    const response = await jkn.getReferensiDokter("001", "2026-01-02");
+    // console.log(response);
+    // expect(response).toEqual(
+    //   expect.objectContaining({
+    //     list: expect.arrayContaining([
+    //       expect.objectContaining({
+    //         kdPrognosa: expect.any(String),
+    //         nmPrognosa: expect.any(String),
+    //       }),
+    //     ]),
+    //   })
+    // );
   });
 });
