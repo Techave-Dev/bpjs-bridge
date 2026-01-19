@@ -39,7 +39,7 @@ export const createBpjsClient = (config: BpjsCLient) => {
         if (typeof encryptedData !== "string") {
           throw new BpjsDecryptionError(
             `[DECRYPTION ERROR] ${url} Format encrypted data tidak valid, expected string`,
-            { type: typeof encryptedData, data: encryptedData }
+            { type: typeof encryptedData, data: encryptedData },
           );
         }
 
@@ -54,7 +54,7 @@ export const createBpjsClient = (config: BpjsCLient) => {
             encryptedData,
             config.consId,
             config.secretKey,
-            timestamp
+            timestamp,
           );
 
           return {
@@ -72,7 +72,7 @@ export const createBpjsClient = (config: BpjsCLient) => {
               originalError: decryptError,
               encryptedLength: encryptedData.length,
               consId: config.consId,
-            }
+            },
           );
         }
       }
@@ -81,6 +81,10 @@ export const createBpjsClient = (config: BpjsCLient) => {
       } ] => ${"NO_CONTENT_IN_RESPONSE"}`;
       res.status = 204;
       res.statusText = "No Content";
+
+      if (res.config.method?.toLowerCase() === "delete") {
+        return res;
+      }
 
       const AxiosError: AxiosError = {
         name: "BpjsResponseError",
@@ -96,7 +100,21 @@ export const createBpjsClient = (config: BpjsCLient) => {
           headers: res.headers,
           config: res.config,
         },
-        toJSON: () => ({}),
+        toJSON: () => ({
+          name: "BpjsResponseError",
+          code: "NO_CONTENT_IN_RESPONSE",
+          message: res.data,
+          status: res.status,
+          config: res.config,
+          isAxiosError: true,
+          response: {
+            data: res.data,
+            status: res.status,
+            statusText: res.statusText,
+            headers: res.headers,
+            config: res.config,
+          },
+        }),
       };
 
       return Promise.reject(AxiosError);
@@ -138,7 +156,7 @@ export const createBpjsClient = (config: BpjsCLient) => {
         toJSON: () => ({}),
       };
       return Promise.reject(AxiosError);
-    }
+    },
   );
 
   return client;
