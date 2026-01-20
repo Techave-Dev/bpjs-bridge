@@ -14,7 +14,7 @@ export class IcareService extends BaseService {
    * @param config konfigurasi BPJS
    * @param redisClient instance Redis (opsional)
    */
-  constructor(config: configType, redisClient?: Redis) {
+  constructor(config: configType, redisClient?: Redis | null) {
     const getBaseUrl = BaseUrl[config.mode].url_antrean_fktp;
     super({ ...config, baseUrl: getBaseUrl }, redisClient);
   }

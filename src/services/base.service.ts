@@ -13,7 +13,7 @@ export class BaseService {
   private redisClient: Redis | null = null;
   private defaultRedisKeyPrefix = "bpjs_bridge_fktp";
 
-  constructor(config: BpjsCLient, redisClient?: Redis) {
+  constructor(config: BpjsCLient, redisClient?: Redis | null) {
     this.client = createBpjsClient(config); // client dari axios yang sudah disiapkan
     if (redisClient) {
       this.redisClient = redisClient;
@@ -46,13 +46,15 @@ export class BaseService {
     value: T,
     expInSecond?: number
   ): Promise<void> {
+    if (!this.redisClient) return;
+
     if (typeof expInSecond !== "number") {
       expInSecond = 3600;
     }
     try {
       const data =
         typeof value === "object" ? JSON.stringify(value) : String(value);
-      await this.redisClient!.set(
+      await this.redisClient.set(
         this.defaultRedisKeyPrefix + ":" + key,
         data,
         "EX",
@@ -75,8 +77,10 @@ export class BaseService {
    * @returns Data dari Redis atau null jika tidak ditemukan
    */
   private async get(key: string): Promise<string | null> {
+    if (!this.redisClient) return null;
+
     try {
-      const data = await this.redisClient!.get(
+      const data = await this.redisClient.get(
         this.defaultRedisKeyPrefix + ":" + key
       );
       if (data) {
@@ -100,8 +104,10 @@ export class BaseService {
    * @param key - Kunci data
    */
   private async del(key: string): Promise<void> {
+    if (!this.redisClient) return;
+
     try {
-      await this.redisClient!.del(this.defaultRedisKeyPrefix + ":" + key);
+      await this.redisClient.del(this.defaultRedisKeyPrefix + ":" + key);
       console.info(`🗑️ Redis DEL: ${this.defaultRedisKeyPrefix + key}`);
     } catch (error) {
       console.error("❌ Redis del error:", error);
@@ -114,12 +120,14 @@ export class BaseService {
    * Menghapus beberapa kunci berdasarkan pola (pattern)
    */
   public async deleteKeysByPattern(pattern: string) {
+    if (!this.redisClient) return;
+
     try {
       let cursor = "0";
       pattern = this.defaultRedisKeyPrefix + ":" + pattern;
 
       do {
-        const [nextCursor, foundKeys] = await this.redisClient!.scan(
+        const [nextCursor, foundKeys] = await this.redisClient.scan(
           cursor,
           "MATCH",
           pattern,
@@ -128,7 +136,7 @@ export class BaseService {
         );
         cursor = nextCursor;
         if (foundKeys.length > 0) {
-          await this.redisClient!.del(...foundKeys);
+          await this.redisClient.del(...foundKeys);
         }
       } while (cursor !== "0");
     } catch (error) {
@@ -144,8 +152,10 @@ export class BaseService {
    * Membersihkan seluruh cache Redis
    */
   public async flushAll(): Promise<void> {
+    if (!this.redisClient) return;
+
     try {
-      await this.redisClient!.flushall();
+      await this.redisClient.flushall();
       console.info("🧹 Redis cache cleared!");
     } catch (error) {
       console.error("❌ Redis flush error:", error);

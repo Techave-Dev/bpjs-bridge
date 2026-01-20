@@ -1,15 +1,10 @@
-import { redis } from "../lib/redis";
 import { PcareService } from "../services/pcare/pcare.service";
 import { PcareConfig } from "./config";
 
 // Setup PcareService
-const pcareService = new PcareService(PcareConfig, redis);
+const pcareService = new PcareService(PcareConfig, null);
 
 describe("PcareService", () => {
-  afterAll(() => {
-    redis.disconnect();
-  });
-
   it("should load environment variables", () => {
     console.log(PcareConfig);
     expect(PcareConfig).toBeDefined();

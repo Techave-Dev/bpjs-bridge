@@ -1,17 +1,12 @@
-import { redis } from "../lib/redis";
 import { AntreanFktpService } from "../services/antrean/fktpBPJS.service";
 import { PcareService } from "../services/pcare/pcare.service";
 import { PcareConfig } from "./config";
 
 // Setup PcareService
-const pcareService = new PcareService(PcareConfig, redis);
-const jkn = new AntreanFktpService(PcareConfig, redis);
+const pcareService = new PcareService(PcareConfig, null);
+const jkn = new AntreanFktpService(PcareConfig, null);
 
 describe("PcareService", () => {
-  afterAll(() => {
-    redis.disconnect();
-  });
-
   it("should load environment variables", () => {
     console.log(PcareConfig);
     expect(PcareConfig).toBeDefined();

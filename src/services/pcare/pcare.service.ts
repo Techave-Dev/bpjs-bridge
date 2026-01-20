@@ -46,7 +46,7 @@ export class PcareService extends BaseService {
    * @param config konfigurasi BPJS
    * @param redisClient instance Redis (opsional)
    */
-  constructor(config: configType, redisClient?: Redis) {
+  constructor(config: configType, redisClient?: Redis | null) {
     const getBaseUrl = BaseUrl[config.mode].url_pcare;
     super({ ...config, baseUrl: getBaseUrl }, redisClient);
 
